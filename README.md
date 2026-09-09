@@ -88,7 +88,7 @@ Lariba Cloud is composed of multiple repositories:
 
 ### Core Backend
 
-https://github.com/laribacloud/lariba-cloud
+https://github.com/node63labs/lariba-cloud
 
 FastAPI backend that powers the Lariba Cloud platform.
 
