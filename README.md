@@ -94,13 +94,13 @@ FastAPI backend that powers the Lariba Cloud platform.
 
 ### Developer Documentation
 
-https://github.com/laribacloud/lariba-docs-site
+https://github.com/node63labs/lariba-docs-site
 
 Public developer documentation and integration guides.
 
 ### JavaScript SDK
 
-https://github.com/laribacloud/lariba-sdk-js
+https://github.com/node63labs/lariba-sdk-js
 
 Official JavaScript SDK for sending events to Lariba Cloud.
 
