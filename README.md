@@ -1,127 +1,64 @@
 # Lariba Cloud API Specification
 
-This repository contains the **official OpenAPI specification** for the Lariba Cloud platform.
+Public API specifications, schemas, and developer contracts for **Lariba Cloud**.
 
-The specification defines the REST API used by developers to send events, manage projects, and interact with the Lariba Cloud platform.
+Lariba Cloud is an operational control plane for governed coordination across cloud and local systems. This repository publishes the developer-facing API contract without exposing Lariba Cloud's private production implementation, operational infrastructure, security-sensitive systems, or proprietary automation.
 
----
+## OpenAPI contract
 
-# Overview
+The current API contract is published in:
 
-Lariba Cloud is a developer platform for collecting and analyzing application events.
-
-The API allows developers to:
-
-* Send application events
-* Authenticate using API keys
-* Manage projects and organizations
-* Query analytics and usage data
-* Integrate with the Lariba Cloud SDKs
-
-The OpenAPI specification in this repository serves as the **single source of truth** for the Lariba Cloud API.
-
----
-
-# Specification File
-
-The API specification is defined in:
-
-```id="9ddnt9"
+```text
 openapi.json
 ```
 
-This file follows the **OpenAPI 3.x specification** and can be used with:
+The document uses **OpenAPI 3.1** and can be consumed by tools such as Swagger UI, Postman, API documentation generators, validation tooling, and compatible SDK generators.
 
-* Swagger UI
-* Postman
-* OpenAPI generators
-* SDK generation tools
+Developers can use this contract to understand supported public endpoints, authentication requirements, request and response schemas, and integration boundaries.
 
----
+## Usage
 
-# Example API Endpoint
+Clone the repository:
 
-Example event ingestion request:
-
-```http id="x77ntd"
-POST /v1/events
-Authorization: Bearer LARIBA_API_KEY
-Content-Type: application/json
+```bash
+git clone https://github.com/node63labs/lariba-spec.git
+cd lariba-spec
 ```
 
-Example payload:
+You can then load `openapi.json` into any OpenAPI 3.1-compatible tooling.
 
-```json id="5ynjru"
-{
-  "event": "user.signup",
-  "properties": {
-    "plan": "starter"
-  }
-}
+Example with a local Swagger UI or API client:
+
+```text
+openapi.json
 ```
 
----
+The specification is intended to describe the public contract. It does not grant access to Lariba Cloud private repositories, internal infrastructure, deployment configuration, secrets, or implementation details.
 
-# Usage
+## Public developer resources
 
-Developers typically interact with the API using one of the official SDKs.
+- [Lariba Cloud JavaScript/TypeScript SDK](https://github.com/node63labs/lariba-sdk-js)
+- [Lariba Cloud developer documentation](https://github.com/node63labs/lariba-docs-site)
+- [NODE63 Labs](https://github.com/node63labs)
 
-Example using the JavaScript SDK:
+## Repository boundary
 
-```javascript id="5zh65g"
-import { Lariba } from "@laribacloud/lariba-sdk-js"
+This repository is part of the public NODE63 Labs developer surface.
 
-const lariba = new Lariba({
-  apiKey: process.env.LARIBA_API_KEY
-})
+Public material may include API specifications, schemas, developer contracts, SDK integration guidance, and selected examples. Production applications, control-plane internals, operational infrastructure, security-sensitive implementation, and proprietary automation are maintained outside this public repository.
 
-await lariba.track("user.signup", {
-  plan: "starter"
-})
-```
+## Versioning
 
----
+API compatibility is governed by the versioned public contract. Breaking API changes should be represented through an explicit version transition rather than silently changing an existing contract.
 
-# Related Repositories
+Consumers should treat `openapi.json` on the default branch as the current published contract unless a release or versioned artifact states otherwise.
 
-Lariba Cloud is composed of multiple repositories:
+## Security
 
-### Core Backend
+Do not report credentials, API keys, secrets, or suspected vulnerabilities in public issues. Follow the security-reporting guidance published by NODE63 Labs or the relevant Lariba Cloud developer resource.
 
-https://github.com/node63labs/lariba-cloud
+## License
 
-FastAPI backend that powers the Lariba Cloud platform.
+Licensed under the [Apache License 2.0](./LICENSE).
 
-### Developer Documentation
-
-https://github.com/node63labs/lariba-docs-site
-
-Public developer documentation and integration guides.
-
-### JavaScript SDK
-
-https://github.com/node63labs/lariba-sdk-js
-
-Official JavaScript SDK for sending events to Lariba Cloud.
-
----
-
-# Versioning
-
-The API follows semantic versioning.
-
-Example:
-
-```id="tfeq74"
-v1
-v1.1
-v2
-```
-
-Major versions indicate breaking changes to the API.
-
----
-
-# License
-
-MIT License © Lariba Cloud
+Copyright © 2026 NODE63 Labs.
