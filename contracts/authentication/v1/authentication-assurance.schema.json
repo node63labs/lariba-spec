@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:authentication:assurance:v1",
+  "title": "AuthenticationAssuranceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "factor_count",
+    "mfa_satisfied",
+    "phishing_resistant",
+    "user_verification",
+    "trusted_device_used",
+    "recovery_method_used"
+  ],
+  "properties": {
+    "factor_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "mfa_satisfied": {
+      "type": "boolean"
+    },
+    "phishing_resistant": {
+      "type": "boolean"
+    },
+    "user_verification": {
+      "type": "boolean"
+    },
+    "trusted_device_used": {
+      "type": "boolean"
+    },
+    "recovery_method_used": {
+      "type": "boolean"
+    }
+  }
+}
