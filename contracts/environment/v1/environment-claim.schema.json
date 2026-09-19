@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:environment:claim:v1",
+  "title": "EnvironmentClaimV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "claim_id",
+    "source_kind",
+    "source_ref",
+    "observed_at"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "claim_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "source_kind": {
+      "enum": [
+        "runtime_variable",
+        "provider_signal",
+        "provider_deployment",
+        "repository_authority",
+        "domain_metadata",
+        "operator_input",
+        "test_fixture"
+      ]
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "claimed_product_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        { "type": "null" }
+      ]
+    },
+    "claimed_environment_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        { "type": "null" }
+      ]
+    },
+    "claimed_environment_class": {
+      "oneOf": [
+        { "enum": ["development", "test", "preview", "staging", "production"] },
+        { "type": "null" }
+      ]
+    },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "metadata": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": true },
+        { "type": "null" }
+      ]
+    }
+  }
+}

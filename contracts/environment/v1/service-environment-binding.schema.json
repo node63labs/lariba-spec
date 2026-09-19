@@ -1,0 +1,298 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:environment:service-binding:v1",
+  "title": "ServiceEnvironmentBindingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "binding_id",
+    "issuing_authority",
+    "service_identity_ref",
+    "environment_identity_ref",
+    "allowed_process_roles",
+    "runtime_selector",
+    "configuration_binding",
+    "database_bindings",
+    "status",
+    "correlation_identity"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "binding_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "issuing_authority": {
+      "const": "urn:node63:shared-platform:service-environment-binding"
+    },
+    "service_identity_ref": { "$ref": "#/$defs/ServiceIdentityReferenceV1" },
+    "environment_identity_ref": { "$ref": "./environment-reference.schema.json" },
+    "allowed_process_roles": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128,
+        "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+      }
+    },
+    "runtime_selector": { "$ref": "#/$defs/AuthorizedRuntimeSelectorV1" },
+    "configuration_binding": { "$ref": "#/$defs/ConfigurationBindingV1" },
+    "database_bindings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/DatabaseAuthorityBindingV1" }
+    },
+    "status": { "enum": ["active", "suspended", "retired"] },
+    "policy_ref": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 512 },
+        { "type": "null" }
+      ]
+    },
+    "correlation_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 320
+    },
+    "metadata": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": true },
+        { "type": "null" }
+      ]
+    }
+  },
+  "$defs": {
+    "ServiceIdentityReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issuing_authority",
+        "principal_id",
+        "product_id",
+        "environment_id",
+        "environment_class",
+        "service_id",
+        "service_class"
+      ],
+      "properties": {
+        "issuing_authority": {
+          "const": "urn:node63:lariba-cloud:service-identity"
+        },
+        "principal_id": { "type": "string", "format": "uuid" },
+        "product_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80,
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "environment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "environment_class": {
+          "enum": ["development", "test", "preview", "staging", "production"]
+        },
+        "service_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "service_class": {
+          "enum": ["api", "worker", "connector", "automation", "system"]
+        }
+      }
+    },
+    "AuthorizedRuntimeSelectorV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "provider_id", "provider_service_id"],
+          "properties": {
+            "mode": { "const": "PROVIDER_MANAGED" },
+            "provider_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+            },
+            "provider_account_id": {
+              "oneOf": [
+                { "type": "string", "minLength": 1, "maxLength": 255 },
+                { "type": "null" }
+              ]
+            },
+            "provider_project_id": {
+              "oneOf": [
+                { "type": "string", "minLength": 1, "maxLength": 255 },
+                { "type": "null" }
+              ]
+            },
+            "provider_service_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "region": {
+              "oneOf": [
+                { "type": "string", "minLength": 1, "maxLength": 128 },
+                { "type": "null" }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "trust_domain_id", "executor_principal_id"],
+          "properties": {
+            "mode": { "const": "LOCAL_TRUSTED" },
+            "trust_domain_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "executor_principal_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "repository_id",
+            "workflow_id",
+            "runner_trust_class",
+            "ephemeral_environment_class"
+          ],
+          "properties": {
+            "mode": { "const": "CI_EPHEMERAL" },
+            "repository_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "workflow_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "runner_trust_class": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "ephemeral_environment_class": {
+              "enum": ["development", "test", "preview", "staging"]
+            }
+          }
+        }
+      ]
+    },
+    "ConfigurationBindingV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "configuration_ref"],
+          "properties": {
+            "mode": { "const": "EXACT" },
+            "configuration_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512
+            },
+            "configuration_digest": {
+              "oneOf": [
+                { "type": "string", "minLength": 1, "maxLength": 255 },
+                { "type": "null" }
+              ]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode"],
+          "properties": {
+            "mode": { "const": "NOT_APPLICABLE" }
+          }
+        }
+      ]
+    },
+    "DatabaseAuthorityBindingV1": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "database_role",
+            "provider_id",
+            "database_target_id",
+            "environment_ref"
+          ],
+          "properties": {
+            "mode": { "const": "EXACT" },
+            "database_role": {
+              "enum": [
+                "application",
+                "migration",
+                "recovery-source",
+                "recovery-target",
+                "test",
+                "acceptance"
+              ]
+            },
+            "provider_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "database_target_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "environment_ref": {
+              "$ref": "./environment-reference.schema.json"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mode", "database_role"],
+          "properties": {
+            "mode": { "const": "NOT_APPLICABLE" },
+            "database_role": {
+              "enum": [
+                "application",
+                "migration",
+                "recovery-source",
+                "recovery-target",
+                "test",
+                "acceptance"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  }
+}
