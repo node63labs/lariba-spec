@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:environment:runtime-observation:v1",
+  "title": "RuntimeObservationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "observation_id",
+    "runtime_instance_id",
+    "runtime_mode",
+    "process_role",
+    "environment_claims",
+    "database_observations",
+    "observed_at",
+    "evidence_refs"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "observation_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "runtime_instance_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "runtime_mode": {
+      "enum": ["PROVIDER_MANAGED", "LOCAL_TRUSTED", "CI_EPHEMERAL"]
+    },
+    "process_role": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "provider_observation": {
+      "oneOf": [
+        { "$ref": "#/$defs/ProviderRuntimeObservationV1" },
+        { "type": "null" }
+      ]
+    },
+    "local_runtime_observation": {
+      "oneOf": [
+        { "$ref": "#/$defs/LocalRuntimeObservationV1" },
+        { "type": "null" }
+      ]
+    },
+    "ci_observation": {
+      "oneOf": [
+        { "$ref": "#/$defs/CIRuntimeObservationV1" },
+        { "type": "null" }
+      ]
+    },
+    "environment_claims": {
+      "type": "array",
+      "items": { "$ref": "./environment-claim.schema.json" }
+    },
+    "configuration_ref": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 512 },
+        { "type": "null" }
+      ]
+    },
+    "configuration_digest": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 255 },
+        { "type": "null" }
+      ]
+    },
+    "database_observations": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/DatabaseRuntimeObservationV1" }
+    },
+    "release_ref": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 512 },
+        { "type": "null" }
+      ]
+    },
+    "observed_at": { "type": "string", "format": "date-time" },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 512
+      }
+    }
+  },
+  "$defs": {
+    "ProviderRuntimeObservationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider_id", "provider_service_id"],
+      "properties": {
+        "provider_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "provider_account_id": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 255 },
+            { "type": "null" }
+          ]
+        },
+        "provider_project_id": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 255 },
+            { "type": "null" }
+          ]
+        },
+        "provider_service_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "deployment_id": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 255 },
+            { "type": "null" }
+          ]
+        },
+        "region": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 128 },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "LocalRuntimeObservationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trust_domain_id", "executor_principal_id"],
+      "properties": {
+        "trust_domain_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "executor_principal_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    },
+    "CIRuntimeObservationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository_id", "workflow_id", "runner_trust_class"],
+      "properties": {
+        "repository_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "workflow_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "runner_trust_class": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    },
+    "DatabaseRuntimeObservationV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["database_role", "provider_id", "database_target_id"],
+      "properties": {
+        "database_role": {
+          "enum": [
+            "application",
+            "migration",
+            "recovery-source",
+            "recovery-target",
+            "test",
+            "acceptance"
+          ]
+        },
+        "provider_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "database_target_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    }
+  }
+}
