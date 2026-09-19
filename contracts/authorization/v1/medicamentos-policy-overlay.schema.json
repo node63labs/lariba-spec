@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:medicamentos:authorization:policy-overlay:v1",
+  "title": "MedicamentOSPolicyOverlayV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "policy_id",
+    "policy_version",
+    "authority_owner",
+    "product_id",
+    "pharmacy_tenant_id",
+    "semantic_action",
+    "decision",
+    "reason_codes"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "policy_id": {
+      "const": "urn:node63:medicamentos:authorization:pharmacy-domain"
+    },
+    "policy_version": { "const": "1.0.0" },
+    "authority_owner": { "const": "MEDOS-DOMAIN" },
+    "product_id": { "const": "medicamentos" },
+    "pharmacy_tenant_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "pharmacy_branch_id": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 255 },
+        { "type": "null" }
+      ]
+    },
+    "workstation_id": {
+      "oneOf": [
+        { "type": "string", "minLength": 1, "maxLength": 255 },
+        { "type": "null" }
+      ]
+    },
+    "semantic_action": {
+      "enum": [
+        "medos.pos:access",
+        "medos.pos:operate",
+        "medos.pos:configure",
+        "medos.sale:read",
+        "medos.sale:create",
+        "medos.sale:update",
+        "medos.sale:complete",
+        "medos.sale:void",
+        "medos.payment:read",
+        "medos.payment:process",
+        "medos.payment:void",
+        "medos.refund:read",
+        "medos.refund:initiate",
+        "medos.refund:complete",
+        "medos.dispensing:read",
+        "medos.dispensing:prepare",
+        "medos.dispensing:authorize",
+        "medos.dispensing:record",
+        "medos.prescription:read",
+        "medos.prescription:record",
+        "medos.prescription:update",
+        "medos.prescription:link_dispensing",
+        "medos.inventory:read",
+        "medos.inventory:adjust",
+        "medos.inventory:count",
+        "medos.stock_movement:read",
+        "medos.stock_movement:create",
+        "medos.stock_movement:complete",
+        "medos.stock_movement:reverse",
+        "medos.batch:read",
+        "medos.batch:manage",
+        "medos.expiry:read",
+        "medos.expiry:manage",
+        "medos.supplier:read",
+        "medos.supplier:manage",
+        "medos.purchase:read",
+        "medos.purchase:create",
+        "medos.purchase:update",
+        "medos.purchase:complete",
+        "medos.report:read",
+        "medos.offline:operate",
+        "medos.offline:reconcile",
+        "medos.regulatory_record:read",
+        "medos.regulatory_record:record"
+      ]
+    },
+    "decision": {
+      "enum": ["DENY", "REQUIRE_APPROVAL", "ALLOW"]
+    },
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^medos\\.[a-z0-9_:-]+$"
+      }
+    }
+  }
+}
