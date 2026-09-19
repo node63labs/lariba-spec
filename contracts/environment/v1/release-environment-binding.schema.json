@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:environment:release-environment-binding:v1",
+  "title": "ReleaseEnvironmentBindingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "release_binding_id",
+    "issuing_authority",
+    "service_environment_binding_id",
+    "service_principal_id",
+    "product_id",
+    "environment_id",
+    "service_id",
+    "release",
+    "status",
+    "correlation_identity"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "release_binding_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "issuing_authority": {
+      "const": "urn:node63:shared-platform:release-environment-binding"
+    },
+    "service_environment_binding_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "service_principal_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "product_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "environment_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "service_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "release": {
+      "$ref": "./release-provenance-reference.schema.json"
+    },
+    "status": { "enum": ["active", "suspended", "retired"] },
+    "correlation_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 320
+    },
+    "metadata": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": true },
+        { "type": "null" }
+      ]
+    }
+  }
+}
