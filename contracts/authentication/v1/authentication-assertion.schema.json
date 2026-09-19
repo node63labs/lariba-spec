@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:authentication:assertion:v1",
+  "title": "AuthenticationAssertionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "assertion_id",
+    "issuer",
+    "audience",
+    "authenticated_principal",
+    "product_context",
+    "environment",
+    "authentication_time",
+    "authentication_methods",
+    "assurance",
+    "session_reference",
+    "issued_at",
+    "expires_at"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "assertion_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "issuer": {
+      "const": "urn:node63:lariba-cloud:authentication"
+    },
+    "audience": {
+      "type": "string",
+      "pattern": "^urn:node63:(product:[a-z0-9][a-z0-9-]*|service:[a-z0-9][a-z0-9-]*:[a-z0-9][a-z0-9-]*)$"
+    },
+    "authenticated_principal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_id",
+        "principal_type"
+      ],
+      "properties": {
+        "principal_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "principal_type": {
+          "const": "human"
+        }
+      }
+    },
+    "product_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_id"
+      ],
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_id",
+        "environment_class"
+      ],
+      "properties": {
+        "environment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment_class": {
+          "enum": [
+            "development",
+            "test",
+            "preview",
+            "staging",
+            "production"
+          ]
+        }
+      }
+    },
+    "organization_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    },
+    "authentication_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "authentication_methods": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "password",
+          "passkey",
+          "totp",
+          "recovery_code",
+          "trusted_device",
+          "oauth:google",
+          "oauth:apple"
+        ]
+      }
+    },
+    "assurance": {
+      "$ref": "./authentication-assurance.schema.json"
+    },
+    "session_reference": {
+      "$ref": "./session-reference.schema.json"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
