@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:environment:binding-decision:v1",
+  "title": "ServiceEnvironmentBindingDecisionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "decision",
+    "reason_codes",
+    "binding_id",
+    "principal_id",
+    "product_id",
+    "environment_id",
+    "runtime_instance_id",
+    "evidence_refs",
+    "evaluated_at"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "decision": { "enum": ["BOUND", "MISMATCH", "INDETERMINATE"] },
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+    },
+    "binding_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "principal_id": { "type": "string", "format": "uuid" },
+    "product_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "environment_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "runtime_instance_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 512 }
+    },
+    "evaluated_at": { "type": "string", "format": "date-time" }
+  }
+}
