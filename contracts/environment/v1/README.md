@@ -122,3 +122,106 @@ SP_A10_PREVIEW_PRODUCTION_ISOLATION_VERIFIED=NO
 SP_A10_RELEASE_SECRET_BINDING_VERIFIED=NO
 SP_A10_L1_ACCEPTED=NO
 ```
+
+
+## A2-240 — Release / Secret Binding
+
+SP-A10 V1 now also defines the canonical bridge from accepted NODE63 release
+provenance into exact service/environment and SP-A4 secret-use verification.
+
+Canonical objects:
+
+```text
+ReleaseProvenanceReferenceV1
+ReleaseEnvironmentBindingV1
+ReleaseSecretBindingDecisionV1
+```
+
+Core invariant:
+
+```text
+accepted release evidence
++
+SP-A10 BOUND runtime
++
+exact release source/deployment target
++
+SP-A4 secret scope/lifecycle
++
+SP-A3 authorization
+=
+release/secret binding decision
+```
+
+A valid release SHA, a successful deployment, or a resolvable secret cannot
+independently establish environment authority.
+
+Required exact relationships:
+
+```text
+release binding.service_environment_binding_id
+=
+ServiceEnvironmentBindingV1.binding_id
+
+release binding.service_principal_id
+=
+ServiceIdentityV1.principal_id
+
+release binding.product_id
+=
+bound runtime product_id
+
+release binding.environment_id
+=
+bound runtime environment_id
+
+release binding.service_id
+=
+bound service_id
+
+runtime observation.release_ref
+=
+release repository + source commit
+
+runtime provider/service/deployment
+=
+accepted release target
+
+SecretUseContextV1 product/environment/service/principal
+=
+SP-A10 bound runtime identity
+```
+
+Fail-closed rules:
+
+```text
+wrong release SHA
+=> MISMATCH
+
+wrong provider/service/deployment
+=> MISMATCH
+
+missing release/runtime evidence
+=> INDETERMINATE
+
+wrong secret product/environment/service/principal
+=> MISMATCH
+
+revoked/retired/expired secret
+=> MISMATCH or INDETERMINATE per SP-A4
+
+SP-A3 DENY or REQUIRE_APPROVAL
+=> NO RELEASE/SECRET BINDING
+```
+
+A2-240 proves the reference release/secret binding contract. It does not claim
+that every historical NODE63 release or every production secret has been
+migrated into the canonical SP-A10/SP-A4 binding model.
+
+```text
+SP_A10_RELEASE_SECRET_BINDING_VERIFIED=NO
+SP_A10_L1_CANDIDATE=NO
+SP_A10_L1_ACCEPTED=NO
+```
+
+Those promotion values may change only after exact executable qualification.
