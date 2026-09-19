@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:environment:release-provenance-reference:v1",
+  "title": "ReleaseProvenanceReferenceV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "record_id",
+    "release_class",
+    "repository",
+    "release_identity",
+    "source",
+    "authorization_result",
+    "runtime_target",
+    "verification_result",
+    "acceptance_result",
+    "evidence_ref"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "release_class": { "const": "RC-01" },
+    "repository": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 255,
+      "pattern": "^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$"
+    },
+    "release_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": {
+          "enum": ["version", "tag", "delivery", "publication", "promotion", "other"]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit_sha", "ref"],
+      "properties": {
+        "commit_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      }
+    },
+    "authorization_result": { "const": "AUTHORIZED" },
+    "runtime_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "target_ref",
+        "provider_id",
+        "provider_service_id",
+        "provider_execution_id"
+      ],
+      "properties": {
+        "mode": { "const": "PROVIDER_MANAGED" },
+        "target_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "provider_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "provider_service_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "provider_execution_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        }
+      }
+    },
+    "verification_result": { "const": "PASS" },
+    "acceptance_result": { "const": "ACCEPTED" },
+    "evidence_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    }
+  }
+}
