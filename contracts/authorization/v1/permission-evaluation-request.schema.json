@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:authorization:permission-evaluation-request:v1",
+  "title": "PermissionEvaluationRequestV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "request_id",
+    "principal",
+    "product_context",
+    "environment",
+    "resource",
+    "semantic_action",
+    "resolved_authority",
+    "evaluation_time"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "request_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "principal": {
+      "$ref": "./permission-decision.schema.json#/$defs/AuthorizationPrincipalV1"
+    },
+    "product_context": {
+      "$ref": "./permission-decision.schema.json#/$defs/ProductContextV1"
+    },
+    "environment": {
+      "$ref": "./permission-decision.schema.json#/$defs/EnvironmentContextV1"
+    },
+    "tenant_context": {
+      "$ref": "./permission-decision.schema.json#/$defs/TenantContextV1"
+    },
+    "resource": {
+      "$ref": "./permission-decision.schema.json#/$defs/AuthorizationResourceV1"
+    },
+    "semantic_action": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*:[a-z0-9][a-z0-9._-]*$"
+    },
+    "resolved_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["permissions", "role_labels", "machine_scopes"],
+      "properties": {
+        "permissions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]*:[a-z0-9][a-z0-9._-]*$"
+          }
+        },
+        "role_labels": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+        },
+        "machine_scopes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+        }
+      }
+    },
+    "inherited_decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "./permission-decision.schema.json#/$defs/PolicyDecisionV1"
+      }
+    },
+    "delegation_context": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": true },
+        { "type": "null" }
+      ]
+    },
+    "capability_context": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": true },
+        { "type": "null" }
+      ]
+    },
+    "approval_reference": {
+      "oneOf": [
+        {
+          "$ref": "./permission-decision.schema.json#/$defs/ApprovalReferenceV1"
+        },
+        { "type": "null" }
+      ]
+    },
+    "execution_context": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "execution_path": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            }
+          }
+        },
+        { "type": "null" }
+      ]
+    },
+    "evaluation_time": { "type": "string", "format": "date-time" }
+  }
+}
