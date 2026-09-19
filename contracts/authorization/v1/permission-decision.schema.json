@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:authorization:permission-decision:v1",
+  "title": "PermissionDecisionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "decision_id",
+    "request_id",
+    "principal",
+    "product_context",
+    "environment",
+    "resource",
+    "semantic_action",
+    "decision",
+    "reason_codes",
+    "policy_decisions",
+    "evaluation_context_digest",
+    "evaluated_at"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "contract_version": { "const": "1.0.0" },
+    "decision_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "request_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+    "principal": { "$ref": "#/$defs/AuthorizationPrincipalV1" },
+    "product_context": { "$ref": "#/$defs/ProductContextV1" },
+    "environment": { "$ref": "#/$defs/EnvironmentContextV1" },
+    "tenant_context": { "$ref": "#/$defs/TenantContextV1" },
+    "resource": { "$ref": "#/$defs/AuthorizationResourceV1" },
+    "semantic_action": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*:[a-z0-9][a-z0-9._-]*$"
+    },
+    "decision": { "$ref": "#/$defs/DecisionV1" },
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+    },
+    "policy_decisions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/PolicyDecisionV1" }
+    },
+    "approval_requirement": {
+      "oneOf": [
+        { "$ref": "#/$defs/ApprovalRequirementV1" },
+        { "type": "null" }
+      ]
+    },
+    "evaluation_context_digest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "evaluated_at": { "type": "string", "format": "date-time" },
+    "valid_until": {
+      "oneOf": [
+        { "type": "string", "format": "date-time" },
+        { "type": "null" }
+      ]
+    },
+    "evidence_metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "DecisionV1": {
+      "enum": ["DENY", "REQUIRE_APPROVAL", "ALLOW"]
+    },
+    "PrincipalTypeV1": {
+      "enum": ["human", "service"]
+    },
+    "AuthorizationPrincipalV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_type",
+        "principal_id",
+        "issuer",
+        "identity_contract",
+        "identity_reference"
+      ],
+      "properties": {
+        "principal_type": { "$ref": "#/$defs/PrincipalTypeV1" },
+        "principal_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "issuer": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "identity_contract": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "identity_reference": { "type": "string", "minLength": 1, "maxLength": 255 }
+      }
+    },
+    "ProductContextV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["product_id"],
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        }
+      }
+    },
+    "EnvironmentContextV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["environment_id", "environment_class"],
+      "properties": {
+        "environment_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "environment_class": {
+          "enum": ["development", "test", "preview", "staging", "production"]
+        }
+      }
+    },
+    "TenantContextV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["tenant_id", "tenant_type"],
+      "properties": {
+        "tenant_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "tenant_type": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "AuthorizationResourceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["resource_type"],
+      "properties": {
+        "resource_type": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "resource_id": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 255 },
+            { "type": "null" }
+          ]
+        },
+        "tenant_id": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 255 },
+            { "type": "null" }
+          ]
+        },
+        "attributes": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "PolicyReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy_id",
+        "policy_version",
+        "authority_layer",
+        "authority_owner"
+      ],
+      "properties": {
+        "policy_id": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "policy_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "authority_layer": {
+          "enum": [
+            "platform",
+            "product",
+            "tenant",
+            "environment",
+            "resource",
+            "principal",
+            "delegation",
+            "capability",
+            "approval"
+          ]
+        },
+        "authority_owner": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "product_id": {
+          "oneOf": [
+            { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+            { "type": "null" }
+          ]
+        },
+        "policy_digest": {
+          "oneOf": [
+            { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "PolicyDecisionV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy_reference", "decision", "reason_codes"],
+      "properties": {
+        "policy_reference": { "$ref": "#/$defs/PolicyReferenceV1" },
+        "decision": { "$ref": "#/$defs/DecisionV1" },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+        },
+        "explanation_code": {
+          "oneOf": [
+            { "type": "string", "minLength": 1, "maxLength": 255 },
+            { "type": "null" }
+          ]
+        },
+        "constraints": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "ApprovalRequirementV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id",
+        "approval_class",
+        "approval_policy",
+        "binding_fields",
+        "reason_codes"
+      ],
+      "properties": {
+        "requirement_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "approval_class": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "approval_policy": { "$ref": "#/$defs/PolicyReferenceV1" },
+        "binding_fields": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 255 }
+        },
+        "suggested_validity_seconds": {
+          "oneOf": [
+            { "type": "integer", "minimum": 1 },
+            { "type": "null" }
+          ]
+        }
+      }
+    },
+    "ApprovalReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "approval_id",
+        "approval_class",
+        "issuer",
+        "approved_by_principal",
+        "issued_at",
+        "expires_at",
+        "binding_digest",
+        "approval_policy",
+        "integrity_reference"
+      ],
+      "properties": {
+        "approval_id": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "approval_class": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "issuer": { "type": "string", "minLength": 1, "maxLength": 512 },
+        "approved_by_principal": { "type": "string", "minLength": 1, "maxLength": 255 },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time" },
+        "binding_digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "approval_policy": { "$ref": "#/$defs/PolicyReferenceV1" },
+        "integrity_reference": { "type": "string", "minLength": 1, "maxLength": 512 }
+      }
+    }
+  }
+}
