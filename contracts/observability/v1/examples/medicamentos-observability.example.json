@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.0.0",
+  "timestamp": "2026-09-22T09:10:00Z",
+  "severity": "INFO",
+  "observability_context": {
+    "schema_version": 1,
+    "contract_version": "1.0.0",
+    "product": {
+      "product_id": "medicamentos"
+    },
+    "service": {
+      "service_id": "medicamentos-api",
+      "service_class": "api",
+      "principal_ref": "example://identity/medicamentos-api"
+    },
+    "environment": {
+      "environment_id": "medos-test-example",
+      "environment_class": "test",
+      "environment_identity_ref": "example://environment/medos-test-example"
+    },
+    "release": {
+      "release_ref": "example://release/medicamentos-api-v0.1.0-example",
+      "release_version": "0.1.0-example",
+      "source_revision": "1111111111111111111111111111111111111111"
+    },
+    "correlation": {
+      "schema_version": 1,
+      "contract_version": "1.0.0",
+      "correlation_id": "example-medos-correlation-001",
+      "request_id": "example-request-001",
+      "causation_id": null,
+      "action_id": null,
+      "event_id": null,
+      "trace_id": null,
+      "span_id": null
+    },
+    "operation": "foundation.health_check",
+    "semantic_action": null,
+    "result": "SUCCESS",
+    "dependency": null,
+    "degraded_state": {
+      "is_degraded": false,
+      "reason": null,
+      "since": null
+    },
+    "data_classification": {
+      "classification_id": "internal",
+      "policy_ref": "example://classification/internal"
+    },
+    "redaction_profile_ref": "example://redaction/safe-operational"
+  },
+  "event_name": "medicamentos.foundation.health_check",
+  "message_code": "FOUNDATION_HEALTHY",
+  "message": "Foundation health check completed.",
+  "attributes": {
+    "duration_ms": 42
+  },
+  "exception": null
+}

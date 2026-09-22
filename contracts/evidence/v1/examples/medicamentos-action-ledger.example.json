@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.0.0",
+  "ledger_record_id": "example-medos-ledger-001",
+  "record_kind": "VERIFICATION_RECORDED",
+  "action_id": "example-medos-action-001",
+  "occurred_at": "2026-09-22T09:00:00Z",
+  "recorded_at": "2026-09-22T09:00:01Z",
+  "actor": {
+    "principal_id": "example-service-principal",
+    "principal_type": "service",
+    "product_id": "medicamentos",
+    "identity_ref": "example://identity/medicamentos-api"
+  },
+  "agent": null,
+  "delegation": null,
+  "capability": {
+    "capability_id": "medos.branch:configuration-verify",
+    "revision": "example-v1",
+    "admission_state": "ADMITTED",
+    "admission_ref": "example://capability/admission/001"
+  },
+  "authorization": {
+    "decision": "ALLOW",
+    "decision_ref": "example://authorization/001",
+    "policy_ref": "example://policy/medos-foundation"
+  },
+  "approval": null,
+  "action": {
+    "semantic_action": "medos.branch:configuration-verify",
+    "exact_action": null,
+    "target_ref": "example://medicamentos/branch/demo-branch"
+  },
+  "context": {
+    "product_id": "medicamentos",
+    "tenant_id": null,
+    "organization_id": "example-org",
+    "environment_id": "medos-test-example",
+    "environment_class": "test"
+  },
+  "runtime": {
+    "runtime_ref": "example://runtime/medicamentos-api/test",
+    "device_ref": null,
+    "executor_ref": "example://service/medicamentos-api"
+  },
+  "execution": {
+    "state": "SUCCEEDED",
+    "outcome_code": "FOUNDATION_VERIFIED",
+    "execution_ref": "example://execution/001"
+  },
+  "verification": {
+    "state": "PASS",
+    "verification_ref": "example://verification/001"
+  },
+  "correlation": {
+    "correlation_id": "example-medos-correlation-001",
+    "causation_id": null,
+    "request_id": "example-request-001",
+    "event_id": null,
+    "trace_id": null
+  },
+  "release_provenance_ref": "example://release/medicamentos-api-v0.1.0-example",
+  "product_domain_evidence_links": [
+    {
+      "schema_version": 1,
+      "contract_version": "1.0.0",
+      "link_id": "example-medos-domain-link-001",
+      "product_id": "medicamentos",
+      "domain_authority": "MEDOS-DOMAIN",
+      "domain_record_type": "branch",
+      "domain_record_ref": "medos-domain://branch/demo-branch",
+      "relationship": "SUBJECT",
+      "domain_revision_ref": null,
+      "integrity_ref": null,
+      "asserted_at": "2026-09-22T09:00:00Z",
+      "asserting_authority_ref": "example://medicamentos/domain-authority"
+    }
+  ],
+  "evidence_refs": [
+    {
+      "kind": "verification",
+      "locator": "example://verification/001",
+      "digest": null
+    }
+  ],
+  "data_classification": {
+    "classification_id": "internal",
+    "policy_ref": "example://classification/internal"
+  },
+  "retention_policy_ref": "example://retention/medos-shared-evidence",
+  "export_policy_ref": "example://export/medos-shared-evidence",
+  "correction_of": null
+}

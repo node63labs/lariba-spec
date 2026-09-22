@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:metric-observation:v1",
+  "title": "MetricObservationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "metric_name",
+    "metric_type",
+    "unit",
+    "value",
+    "observed_at",
+    "observability_context",
+    "dimensions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "metric_name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_.:-]*$",
+      "maxLength": 255
+    },
+    "metric_type": {
+      "enum": [
+        "COUNTER",
+        "GAUGE",
+        "HISTOGRAM"
+      ]
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "value": {
+      "type": "number"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "observability_context": {
+      "$ref": "./observability-context.schema.json"
+    },
+    "dimensions": {
+      "type": "object",
+      "propertyNames": {
+        "not": {
+          "enum": [
+            "correlation_id",
+            "request_id",
+            "trace_id",
+            "span_id",
+            "action_id",
+            "event_id",
+            "user_id",
+            "email",
+            "ip",
+            "tenant_id",
+            "organization_id",
+            "sale_id",
+            "prescription_id",
+            "inventory_item_id"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 255
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:evidence:product-domain-evidence-link:v1",
+  "title": "ProductDomainEvidenceLinkV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "link_id",
+    "product_id",
+    "domain_authority",
+    "domain_record_type",
+    "domain_record_ref",
+    "relationship",
+    "asserted_at",
+    "asserting_authority_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "link_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "product_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "maxLength": 80
+    },
+    "domain_authority": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "domain_record_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "domain_record_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "relationship": {
+      "enum": [
+        "SUBJECT",
+        "INPUT",
+        "OUTPUT",
+        "VERIFICATION",
+        "RELATED"
+      ]
+    },
+    "domain_revision_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "integrity_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "asserted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "asserting_authority_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    }
+  }
+}

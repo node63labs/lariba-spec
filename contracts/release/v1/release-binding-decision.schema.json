@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:release:binding-decision:v1",
+  "title": "ReleaseBindingDecisionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "decision_id",
+    "release_record_ref",
+    "source_binding",
+    "ci_binding",
+    "build_binding",
+    "artifact_binding",
+    "environment_binding",
+    "release_action_binding",
+    "verification_binding",
+    "evaluated_at",
+    "evidence_refs",
+    "overall_result"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "decision_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "release_record_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "source_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "ci_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "build_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "artifact_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "environment_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "release_action_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "verification_binding": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "evaluated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "./release-evidence-reference.schema.json"
+      }
+    },
+    "overall_result": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE"
+      ]
+    }
+  }
+}

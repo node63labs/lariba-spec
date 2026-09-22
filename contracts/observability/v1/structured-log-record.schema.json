@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:structured-log-record:v1",
+  "title": "StructuredLogRecordV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "timestamp",
+    "severity",
+    "observability_context",
+    "event_name",
+    "message_code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "severity": {
+      "enum": [
+        "TRACE",
+        "DEBUG",
+        "INFO",
+        "WARN",
+        "ERROR",
+        "CRITICAL"
+      ]
+    },
+    "observability_context": {
+      "$ref": "./observability-context.schema.json"
+    },
+    "event_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "message_code": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "message": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "attributes": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 1024
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "propertyNames": {
+        "not": {
+          "enum": [
+            "password",
+            "api_key",
+            "access_token",
+            "bearer_token",
+            "private_key",
+            "authorization_header",
+            "cookie",
+            "raw_request_body",
+            "raw_response_body"
+          ]
+        }
+      }
+    },
+    "exception": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "exception_type",
+            "error_code"
+          ],
+          "properties": {
+            "exception_type": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "error_code": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "sanitized_message": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "sanitized_stack_ref": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1024
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

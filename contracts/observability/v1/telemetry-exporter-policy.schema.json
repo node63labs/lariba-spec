@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:telemetry-exporter-policy:v1",
+  "title": "TelemetryExporterPolicyV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "exporter_id",
+    "exporter_type",
+    "destination_class",
+    "destination_ref",
+    "allowed_products",
+    "allowed_environments",
+    "allowed_signals",
+    "classification_policy_ref",
+    "redaction_policy_ref",
+    "transport_security_required",
+    "status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "exporter_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "exporter_type": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "destination_class": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "destination_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "allowed_products": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9][a-z0-9-]*$",
+        "maxLength": 80
+      }
+    },
+    "allowed_environments": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 255
+      }
+    },
+    "allowed_signals": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "logs",
+          "metrics",
+          "traces"
+        ]
+      }
+    },
+    "classification_policy_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "redaction_policy_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "transport_security_required": {
+      "type": "boolean"
+    },
+    "credential_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "enum": [
+        "ACTIVE",
+        "SUSPENDED",
+        "RETIRED"
+      ]
+    }
+  }
+}
