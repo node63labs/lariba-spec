@@ -42,6 +42,8 @@ BINDING_FIELDS = (
     "verification_binding",
 )
 
+CANONICAL_SERVICE_ENV_IDENTIFIER_PATTERN = r"^[a-z0-9][a-z0-9._:-]*$"
+
 SAFE_METRIC_DIMENSIONS = {
     "product_id",
     "service_id",
@@ -429,6 +431,112 @@ def inspect_schema_repository(
 
     return errors
 
+
+
+def inspect_service_identity_compatibility(
+    root: Path,
+    documents: dict[Path, object],
+) -> list[str]:
+    errors: list[str] = []
+
+    v1_path = (
+        root / "contracts/service-identity/v1/service-identity.schema.json"
+    ).resolve()
+    v2_path = (
+        root / "contracts/service-identity/v2/service-identity.schema.json"
+    ).resolve()
+    a10_path = (
+        root / "contracts/environment/v1/service-environment-binding.schema.json"
+    ).resolve()
+    a4_path = (
+        root / "contracts/secrets/v1/secret-scope.schema.json"
+    ).resolve()
+
+    v1 = documents[v1_path]
+    v2 = documents[v2_path]
+    a10 = documents[a10_path]
+    a4 = documents[a4_path]
+
+    v1_environment = (
+        v1.get("properties", {})
+        .get("environment", {})
+        .get("properties", {})
+        .get("environment_id", {})
+    )
+    v1_service = v1.get("properties", {}).get("service_id", {})
+
+    if "pattern" in v1_environment or "pattern" in v1_service:
+        fail(errors, "SP-A1 v1 historical schema must not be silently tightened")
+
+    if v2.get("properties", {}).get("schema_version", {}).get("const") != 2:
+        fail(errors, "SP-A1 v2 must declare schema_version=2")
+    if v2.get("properties", {}).get("contract_version", {}).get("const") != "2.0.0":
+        fail(errors, "SP-A1 v2 must declare contract_version=2.0.0")
+
+    v2_environment = (
+        v2.get("properties", {})
+        .get("environment", {})
+        .get("properties", {})
+        .get("environment_id", {})
+    )
+    v2_service = v2.get("properties", {}).get("service_id", {})
+
+    a10_reference = (
+        a10.get("$defs", {})
+        .get("ServiceIdentityReferenceV1", {})
+        .get("properties", {})
+    )
+    a10_environment = a10_reference.get("environment_id", {})
+    a10_service = a10_reference.get("service_id", {})
+
+    a4_consumer = (
+        a4.get("$defs", {})
+        .get("SecretConsumerBindingV1", {})
+        .get("properties", {})
+    )
+    a4_environment = a4_consumer.get("environment_id", {})
+    a4_service = a4_consumer.get("service_id", {})
+
+    compared = {
+        "SP-A1 v2 environment_id": v2_environment,
+        "SP-A1 v2 service_id": v2_service,
+        "SP-A10 environment_id": a10_environment,
+        "SP-A10 service_id": a10_service,
+        "SP-A4 environment_id": a4_environment,
+        "SP-A4 service_id": a4_service,
+    }
+
+    for name, field in compared.items():
+        if field.get("pattern") != CANONICAL_SERVICE_ENV_IDENTIFIER_PATTERN:
+            fail(errors, f"{name}: canonical identifier pattern mismatch")
+        if field.get("minLength") != 1:
+            fail(errors, f"{name}: minLength must be 1")
+        if field.get("maxLength") != 255:
+            fail(errors, f"{name}: maxLength must be 255")
+
+    accepted = (
+        "medicamentos-api",
+        "medicamentos-production",
+        "worker_1",
+        "api:v2",
+        "preview.eu-west",
+    )
+    rejected = (
+        "MedicamentOS API",
+        "Production Environment",
+        "-api",
+        " service",
+    )
+
+    for value in accepted:
+        if re.fullmatch(CANONICAL_SERVICE_ENV_IDENTIFIER_PATTERN, value) is None:
+            fail(errors, f"canonical identifier self-test rejected valid value: {value}")
+
+    for value in rejected:
+        if re.fullmatch(CANONICAL_SERVICE_ENV_IDENTIFIER_PATTERN, value) is not None:
+            fail(errors, f"canonical identifier self-test accepted invalid value: {value}")
+
+    return errors
 
 def inspect_a7_schema(
     root: Path,
@@ -996,6 +1104,7 @@ def main() -> int:
                 documents,
             )
         )
+        errors.extend(inspect_service_identity_compatibility(root, documents))
         errors.extend(inspect_a7_schema(root, documents))
         errors.extend(inspect_a8_schema(root, documents))
         errors.extend(inspect_a9_schema(root, documents))
@@ -1021,7 +1130,7 @@ def main() -> int:
                 "schemas": len(schema_paths),
                 "examples": example_count,
                 "refs_checked": ref_count,
-                "semantic_profiles": ["SP-A7", "SP-A8", "SP-A9"],
+                "semantic_profiles": ["SP-A1-COMPATIBILITY", "SP-A7", "SP-A8", "SP-A9"],
                 "negative_self_tests": 7,
                 "result": "PASS",
             },
