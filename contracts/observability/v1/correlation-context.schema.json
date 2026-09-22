@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:correlation-context:v1",
+  "title": "CorrelationContextV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "correlation_id"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 320
+    },
+    "request_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 320
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "causation_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 320
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "action_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 320
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "event_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 320
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "trace_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "span_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?!0{16}$)[0-9a-f]{16}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

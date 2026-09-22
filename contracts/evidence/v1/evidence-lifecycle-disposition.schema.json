@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:evidence:lifecycle-disposition:v1",
+  "title": "EvidenceLifecycleDispositionV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "disposition_id",
+    "ledger_record_id",
+    "policy_ref",
+    "disposition",
+    "decided_at",
+    "authority_ref",
+    "reason_code"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "disposition_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "ledger_record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "policy_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "disposition": {
+      "enum": [
+        "RETAINED",
+        "REDACTED",
+        "PSEUDONYMIZED",
+        "ARCHIVED_RESTRICTED",
+        "EXPIRED",
+        "DELETED_BY_POLICY"
+      ]
+    },
+    "decided_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "executed_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authority_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "remaining_evidence_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "integrity_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  }
+}

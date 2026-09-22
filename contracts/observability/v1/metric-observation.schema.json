@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:metric-observation:v1",
+  "title": "MetricObservationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "metric_name",
+    "metric_type",
+    "unit",
+    "value",
+    "observed_at",
+    "observability_context",
+    "dimensions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "metric_name": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_.:-]*$",
+      "maxLength": 255
+    },
+    "metric_type": {
+      "enum": [
+        "COUNTER",
+        "GAUGE",
+        "HISTOGRAM"
+      ]
+    },
+    "unit": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "value": {
+      "type": "number"
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "observability_context": {
+      "$ref": "./observability-context.schema.json"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "maxLength": 80
+        },
+        "service_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment_class": {
+          "enum": [
+            "development",
+            "test",
+            "preview",
+            "staging",
+            "production"
+          ]
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "result": {
+          "enum": [
+            "SUCCESS",
+            "FAILURE",
+            "DEGRADED",
+            "DENIED",
+            "INDETERMINATE",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "dependency_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "dependency_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "degraded_state": {
+          "enum": [
+            "NONE",
+            "DEPENDENCY_UNAVAILABLE",
+            "OBSERVABILITY_PARTIAL",
+            "QUEUE_BACKLOG",
+            "RATE_LIMITED",
+            "READ_ONLY_MODE",
+            "FAILOVER_ACTIVE",
+            "UNKNOWN"
+          ]
+        },
+        "release_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        }
+      }
+    }
+  }
+}

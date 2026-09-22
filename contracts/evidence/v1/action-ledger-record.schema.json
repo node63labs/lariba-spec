@@ -1,0 +1,1222 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:evidence:action-ledger-record:v1",
+  "title": "ActionLedgerRecordV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "ledger_record_id",
+    "record_kind",
+    "action_id",
+    "occurred_at",
+    "recorded_at",
+    "actor",
+    "capability",
+    "action",
+    "context",
+    "execution",
+    "verification",
+    "correlation",
+    "product_domain_evidence_links",
+    "evidence_refs",
+    "data_classification",
+    "retention_policy_ref",
+    "export_policy_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "ledger_record_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "record_kind": {
+      "enum": [
+        "ACTION_REQUESTED",
+        "AUTHORIZATION_DECIDED",
+        "APPROVAL_DECIDED",
+        "EXECUTION_STARTED",
+        "EXECUTION_COMPLETED",
+        "VERIFICATION_RECORDED",
+        "DEGRADED_MODE_RECORDED",
+        "CORRECTION"
+      ]
+    },
+    "action_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "recorded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "actor": {
+      "$ref": "#/$defs/AuthorityPrincipalReferenceV1"
+    },
+    "agent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AgentEvidenceReferenceV1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "delegation": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DelegationReferenceV1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "capability": {
+      "$ref": "#/$defs/CapabilityReferenceV1"
+    },
+    "authorization": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AuthorizationReferenceV1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "approval": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ApprovalReferenceV1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "action": {
+      "$ref": "#/$defs/ActionReferenceV1"
+    },
+    "context": {
+      "$ref": "#/$defs/ActionContextV1"
+    },
+    "runtime": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/RuntimeReferenceV1"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "execution": {
+      "$ref": "#/$defs/ExecutionStateV1"
+    },
+    "verification": {
+      "$ref": "#/$defs/VerificationStateV1"
+    },
+    "correlation": {
+      "$ref": "#/$defs/CorrelationReferenceV1"
+    },
+    "release_provenance_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "product_domain_evidence_links": {
+      "type": "array",
+      "items": {
+        "$ref": "./product-domain-evidence-link.schema.json"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EvidenceReferenceV1"
+      }
+    },
+    "data_classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification_id",
+        "policy_ref"
+      ],
+      "properties": {
+        "classification_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "retention_policy_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "export_policy_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "correction_of": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "DelegationReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delegation_ref",
+        "delegator_ref",
+        "delegate_ref"
+      ],
+      "properties": {
+        "delegation_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "delegator_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "delegate_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "expires_at": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "CapabilityReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_id",
+        "revision",
+        "admission_state"
+      ],
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "admission_state": {
+          "enum": [
+            "ADMITTED",
+            "SUSPENDED",
+            "REVOKED",
+            "INDETERMINATE"
+          ]
+        },
+        "admission_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "AuthorizationReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "decision_ref",
+        "policy_ref"
+      ],
+      "properties": {
+        "decision": {
+          "enum": [
+            "DENY",
+            "REQUIRE_APPROVAL",
+            "ALLOW"
+          ]
+        },
+        "decision_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "ApprovalReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision",
+        "approval_ref"
+      ],
+      "properties": {
+        "decision": {
+          "enum": [
+            "APPROVED",
+            "DENIED",
+            "EXPIRED",
+            "REVOKED"
+          ]
+        },
+        "approval_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "decided_at": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "ActionReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "semantic_action",
+        "target_ref"
+      ],
+      "properties": {
+        "semantic_action": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "exact_action": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "ActionContextV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_id",
+        "environment_id"
+      ],
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "maxLength": 80
+        },
+        "tenant_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "organization_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "environment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment_class": {
+          "enum": [
+            "development",
+            "test",
+            "preview",
+            "staging",
+            "production"
+          ]
+        }
+      }
+    },
+    "RuntimeReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_ref"
+      ],
+      "properties": {
+        "runtime_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "device_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executor_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "ExecutionStateV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "NOT_STARTED",
+            "STARTED",
+            "SUCCEEDED",
+            "FAILED",
+            "DEGRADED",
+            "INDETERMINATE"
+          ]
+        },
+        "outcome_code": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "execution_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "VerificationStateV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state"
+      ],
+      "properties": {
+        "state": {
+          "enum": [
+            "NOT_APPLICABLE",
+            "PENDING",
+            "PASS",
+            "FAIL",
+            "INDETERMINATE"
+          ]
+        },
+        "verification_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "CorrelationReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "correlation_id"
+      ],
+      "properties": {
+        "correlation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 320
+        },
+        "causation_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 320
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "request_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 320
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "event_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 320
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "trace_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "EvidenceReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "locator"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "digest": {
+          "oneOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "algorithm",
+                "value"
+              ],
+              "properties": {
+                "algorithm": {
+                  "enum": [
+                    "sha256",
+                    "sha384",
+                    "sha512"
+                  ]
+                },
+                "value": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 256
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "AuthorityPrincipalReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_id",
+        "principal_type"
+      ],
+      "properties": {
+        "principal_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "principal_type": {
+          "enum": [
+            "human",
+            "service"
+          ]
+        },
+        "product_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$",
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "identity_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "AgentEvidenceReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_id",
+        "agent_type",
+        "identity_ref"
+      ],
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "agent_type": {
+          "enum": [
+            "agent",
+            "system"
+          ]
+        },
+        "identity_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "product_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$",
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executor_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "ACTION_REQUESTED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authorization": {
+            "type": "null"
+          },
+          "approval": {
+            "type": "null"
+          },
+          "correction_of": {
+            "type": "null"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "AUTHORIZATION_DECIDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorization"
+        ],
+        "properties": {
+          "authorization": {
+            "$ref": "#/$defs/AuthorizationReferenceV1"
+          },
+          "correction_of": {
+            "type": "null"
+          },
+          "approval": {
+            "type": "null"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "APPROVAL_DECIDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorization",
+          "approval"
+        ],
+        "properties": {
+          "authorization": {
+            "type": "object",
+            "properties": {
+              "decision": {
+                "const": "REQUIRE_APPROVAL"
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          },
+          "approval": {
+            "$ref": "#/$defs/ApprovalReferenceV1"
+          },
+          "correction_of": {
+            "type": "null"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "enum": [
+              "EXECUTION_STARTED",
+              "EXECUTION_COMPLETED",
+              "VERIFICATION_RECORDED",
+              "DEGRADED_MODE_RECORDED"
+            ]
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorization"
+        ],
+        "properties": {
+          "authorization": {
+            "type": "object",
+            "properties": {
+              "decision": {
+                "enum": [
+                  "ALLOW",
+                  "REQUIRE_APPROVAL"
+                ]
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          },
+          "correction_of": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "CORRECTION"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "correction_of"
+        ],
+        "properties": {
+          "correction_of": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "record_kind": {
+                "enum": [
+                  "EXECUTION_STARTED",
+                  "EXECUTION_COMPLETED",
+                  "VERIFICATION_RECORDED",
+                  "DEGRADED_MODE_RECORDED"
+                ]
+              }
+            },
+            "required": [
+              "record_kind"
+            ]
+          },
+          {
+            "properties": {
+              "authorization": {
+                "type": "object",
+                "properties": {
+                  "decision": {
+                    "const": "REQUIRE_APPROVAL"
+                  }
+                },
+                "required": [
+                  "decision"
+                ]
+              }
+            },
+            "required": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "approval"
+        ],
+        "properties": {
+          "approval": {
+            "type": "object",
+            "properties": {
+              "decision": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "record_kind": {
+                "enum": [
+                  "EXECUTION_STARTED",
+                  "EXECUTION_COMPLETED",
+                  "VERIFICATION_RECORDED",
+                  "DEGRADED_MODE_RECORDED"
+                ]
+              }
+            },
+            "required": [
+              "record_kind"
+            ]
+          },
+          {
+            "properties": {
+              "authorization": {
+                "type": "object",
+                "properties": {
+                  "decision": {
+                    "const": "ALLOW"
+                  }
+                },
+                "required": [
+                  "decision"
+                ]
+              }
+            },
+            "required": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "approval": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "EXECUTION_STARTED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "PENDING",
+                  "NOT_APPLICABLE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "EXECUTION_COMPLETED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "SUCCEEDED",
+                  "FAILED",
+                  "DEGRADED",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "PENDING",
+                  "NOT_APPLICABLE",
+                  "PASS",
+                  "FAIL",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "VERIFICATION_RECORDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "PASS",
+                  "FAIL",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "DEGRADED_MODE_RECORDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "DEGRADED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

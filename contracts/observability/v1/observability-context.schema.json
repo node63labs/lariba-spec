@@ -1,0 +1,305 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:context:v1",
+  "title": "ObservabilityContextV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "product",
+    "service",
+    "environment",
+    "correlation",
+    "operation",
+    "result",
+    "data_classification",
+    "redaction_profile_ref"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_id"
+      ],
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "maxLength": 80
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "service_id"
+      ],
+      "properties": {
+        "service_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "service_class": {
+          "oneOf": [
+            {
+              "enum": [
+                "api",
+                "worker",
+                "connector",
+                "automation",
+                "system"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "principal_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_id",
+        "environment_class"
+      ],
+      "properties": {
+        "environment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment_class": {
+          "enum": [
+            "development",
+            "test",
+            "preview",
+            "staging",
+            "production"
+          ]
+        },
+        "environment_identity_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "release": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "release_ref"
+          ],
+          "properties": {
+            "release_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "release_version": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "source_revision": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "correlation": {
+      "$ref": "./correlation-context.schema.json"
+    },
+    "operation": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "semantic_action": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "result": {
+      "enum": [
+        "SUCCESS",
+        "FAILURE",
+        "DEGRADED",
+        "DENIED",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "dependency": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "dependency_type",
+            "dependency_id"
+          ],
+          "properties": {
+            "dependency_type": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "dependency_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 255
+            },
+            "operation": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 255
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "degraded_state": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "is_degraded"
+          ],
+          "properties": {
+            "is_degraded": {
+              "type": "boolean"
+            },
+            "reason": {
+              "oneOf": [
+                {
+                  "enum": [
+                    "DEPENDENCY_UNAVAILABLE",
+                    "OBSERVABILITY_PARTIAL",
+                    "QUEUE_BACKLOG",
+                    "RATE_LIMITED",
+                    "READ_ONLY_MODE",
+                    "FAILOVER_ACTIVE",
+                    "UNKNOWN"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "since": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "data_classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "classification_id",
+        "policy_ref"
+      ],
+      "properties": {
+        "classification_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "policy_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      }
+    },
+    "redaction_profile_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    }
+  }
+}

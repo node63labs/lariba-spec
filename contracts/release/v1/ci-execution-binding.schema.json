@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:release:ci-execution-binding:v1",
+  "title": "CIExecutionBindingV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "ci_provider",
+    "ci_execution_id",
+    "repository",
+    "workflow_identity",
+    "source_commit_sha",
+    "result",
+    "evidence_ref",
+    "binding_status"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "ci_provider": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "ci_execution_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "repository": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$",
+      "maxLength": 255
+    },
+    "workflow_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "source_commit_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "trigger_ref": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "trigger_event": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "started_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "completed_at": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "CANCELLED",
+        "INDETERMINATE"
+      ]
+    },
+    "evidence_ref": {
+      "$ref": "./release-evidence-reference.schema.json"
+    },
+    "binding_status": {
+      "enum": [
+        "MATCH",
+        "MISMATCH",
+        "INDETERMINATE",
+        "NOT_APPLICABLE"
+      ]
+    }
+  }
+}

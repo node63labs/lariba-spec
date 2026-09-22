@@ -1,0 +1,177 @@
+{
+  "schema_version": 1,
+  "contract_version": "1.0.0",
+  "provenance_id": "EXAMPLE-MEDOS-SPA9-001",
+  "recorded_at": "2026-09-22T09:20:00Z",
+  "canonical_release_record": {
+    "schema_id": "urn:node63:f1-w3:release-record:1.0.0",
+    "schema_version": "1.0.0",
+    "record_id": "EXAMPLE-MEDOS-RC01-001",
+    "record_ref": "example://medicamentos/releases/EXAMPLE-MEDOS-RC01-001",
+    "record_digest": null
+  },
+  "release_class": "RC-01",
+  "lifecycle_state": "ACCEPTED",
+  "repository": "node63labs/medicamentos",
+  "release_identity": {
+    "kind": "version",
+    "value": "medicamentos-api-v0.1.0-example"
+  },
+  "source": {
+    "schema_version": 1,
+    "contract_version": "1.0.0",
+    "repository": "node63labs/medicamentos",
+    "commit_sha": "1111111111111111111111111111111111111111",
+    "source_ref": "refs/tags/medicamentos-api-v0.1.0-example",
+    "source_ref_type": "tag",
+    "repository_authority_ref": "example://repository/node63labs/medicamentos",
+    "binding_status": "MATCH"
+  },
+  "product_context": {
+    "product_id": "medicamentos",
+    "product_identity_ref": "example://product/medicamentos"
+  },
+  "environment_context": {
+    "environment_id": "medos-preview-example",
+    "environment_identity_ref": "example://environment/medos-preview-example",
+    "service_id": "medicamentos-api",
+    "service_principal_id": "example-service-principal",
+    "service_environment_binding_ref": "example://binding/medicamentos-api-preview"
+  },
+  "ci_bindings": [
+    {
+      "schema_version": 1,
+      "contract_version": "1.0.0",
+      "ci_provider": "github-actions",
+      "ci_execution_id": "example-run-001",
+      "repository": "node63labs/medicamentos",
+      "workflow_identity": "example://github-actions/workflows/ci",
+      "source_commit_sha": "1111111111111111111111111111111111111111",
+      "trigger_ref": "refs/tags/medicamentos-api-v0.1.0-example",
+      "trigger_event": "workflow_dispatch",
+      "started_at": "2026-09-22T09:01:00Z",
+      "completed_at": "2026-09-22T09:05:00Z",
+      "result": "PASS",
+      "evidence_ref": {
+        "schema_version": 1,
+        "contract_version": "1.0.0",
+        "kind": "ci-run",
+        "locator": "example://github-actions/medicamentos/run/001",
+        "digest": null
+      },
+      "binding_status": "MATCH"
+    }
+  ],
+  "builds": [
+    {
+      "schema_version": 1,
+      "contract_version": "1.0.0",
+      "build_id": "medos-example-build-001",
+      "builder_identity": "example://github-actions",
+      "repository": "node63labs/medicamentos",
+      "source_commit_sha": "1111111111111111111111111111111111111111",
+      "ci_execution_ref": "example://github-actions/medicamentos/run/001",
+      "created_at": "2026-09-22T09:04:00Z"
+    }
+  ],
+  "artifacts": [],
+  "authorization": {
+    "decision": "AUTHORIZED",
+    "authority_ref": "example://medicamentos/release-authority/001",
+    "decided_at": "2026-09-22T09:06:00Z",
+    "evidence_refs": [
+      {
+        "schema_version": 1,
+        "contract_version": "1.0.0",
+        "kind": "release-authorization",
+        "locator": "example://medicamentos/release-authorization/001",
+        "digest": null
+      }
+    ]
+  },
+  "release_action": {
+    "schema_version": 1,
+    "contract_version": "1.0.0",
+    "release_record_ref": "example://medicamentos/releases/EXAMPLE-MEDOS-RC01-001",
+    "release_identity": {
+      "kind": "version",
+      "value": "medicamentos-api-v0.1.0-example"
+    },
+    "source_commit_sha": "1111111111111111111111111111111111111111",
+    "environment_ref": "example://environment/medos-preview-example",
+    "target_ref": "example://medicamentos/preview/api",
+    "action_kind": "deployment",
+    "provider_execution_ref": null,
+    "occurred_at": "2026-09-22T09:10:00Z",
+    "evidence_refs": [
+      {
+        "schema_version": 1,
+        "contract_version": "1.0.0",
+        "kind": "deployment",
+        "locator": "example://medicamentos/deployments/001",
+        "digest": null
+      }
+    ]
+  },
+  "verification": {
+    "result": "PASS",
+    "verified_at": "2026-09-22T09:15:00Z",
+    "evidence_refs": [
+      {
+        "schema_version": 1,
+        "contract_version": "1.0.0",
+        "kind": "health-verification",
+        "locator": "example://medicamentos/verification/001",
+        "digest": null
+      }
+    ]
+  },
+  "acceptance": {
+    "result": "ACCEPTED",
+    "authority_ref": "example://medicamentos/release-acceptance/001",
+    "decided_at": "2026-09-22T09:20:00Z",
+    "evidence_refs": [
+      {
+        "schema_version": 1,
+        "contract_version": "1.0.0",
+        "kind": "release-acceptance",
+        "locator": "example://medicamentos/acceptance/001",
+        "digest": null
+      }
+    ]
+  },
+  "failure_recovery": [],
+  "binding_decision": {
+    "schema_version": 1,
+    "contract_version": "1.0.0",
+    "decision_id": "example-binding-decision-001",
+    "release_record_ref": "example://medicamentos/releases/EXAMPLE-MEDOS-RC01-001",
+    "source_binding": "MATCH",
+    "ci_binding": "MATCH",
+    "build_binding": "MATCH",
+    "artifact_binding": "NOT_APPLICABLE",
+    "environment_binding": "MATCH",
+    "release_action_binding": "MATCH",
+    "verification_binding": "MATCH",
+    "evaluated_at": "2026-09-22T09:16:00Z",
+    "evidence_refs": [
+      {
+        "schema_version": 1,
+        "contract_version": "1.0.0",
+        "kind": "binding-review",
+        "locator": "example://medicamentos/binding-review/001",
+        "digest": null
+      }
+    ],
+    "overall_result": "MATCH"
+  },
+  "evidence_refs": [
+    {
+      "schema_version": 1,
+      "contract_version": "1.0.0",
+      "kind": "canonical-release-record",
+      "locator": "example://medicamentos/releases/EXAMPLE-MEDOS-RC01-001",
+      "digest": null
+    }
+  ]
+}

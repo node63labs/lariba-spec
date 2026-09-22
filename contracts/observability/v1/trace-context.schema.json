@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:trace-context:v1",
+  "title": "TraceContextV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "trace_id",
+    "span_id",
+    "trace_flags",
+    "is_remote",
+    "correlation_id",
+    "propagation_format"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+    },
+    "span_id": {
+      "type": "string",
+      "pattern": "^(?!0{16}$)[0-9a-f]{16}$"
+    },
+    "parent_span_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?!0{16}$)[0-9a-f]{16}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "trace_flags": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{2}$"
+    },
+    "trace_state": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "is_remote": {
+      "type": "boolean"
+    },
+    "correlation_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 320
+    },
+    "propagation_format": {
+      "const": "W3C_TRACE_CONTEXT"
+    }
+  }
+}

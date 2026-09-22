@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:observability:span-observation:v1",
+  "title": "SpanObservationV1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "trace_context",
+    "span_name",
+    "span_kind",
+    "started_at",
+    "ended_at",
+    "duration_ms",
+    "status",
+    "observability_context",
+    "attributes",
+    "events",
+    "links"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "contract_version": {
+      "const": "1.0.0"
+    },
+    "trace_context": {
+      "$ref": "./trace-context.schema.json"
+    },
+    "span_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255
+    },
+    "span_kind": {
+      "enum": [
+        "SERVER",
+        "CLIENT",
+        "PRODUCER",
+        "CONSUMER",
+        "INTERNAL"
+      ]
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_ms": {
+      "type": "number",
+      "minimum": 0
+    },
+    "status": {
+      "enum": [
+        "UNSET",
+        "OK",
+        "ERROR"
+      ]
+    },
+    "observability_context": {
+      "$ref": "./observability-context.schema.json"
+    },
+    "attributes": {
+      "type": "object",
+      "propertyNames": {
+        "not": {
+          "enum": [
+            "password",
+            "api_key",
+            "access_token",
+            "bearer_token",
+            "private_key",
+            "authorization_header",
+            "cookie",
+            "request_body",
+            "response_body",
+            "db_statement_raw"
+          ]
+        }
+      },
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "string",
+            "maxLength": 1024
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "timestamp"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "attributes": {
+            "type": "object",
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "maxLength": 1024
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "trace_id",
+          "span_id"
+        ],
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "pattern": "^(?!0{32}$)[0-9a-f]{32}$"
+          },
+          "span_id": {
+            "type": "string",
+            "pattern": "^(?!0{16}$)[0-9a-f]{16}$"
+          },
+          "correlation_id": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 320
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
