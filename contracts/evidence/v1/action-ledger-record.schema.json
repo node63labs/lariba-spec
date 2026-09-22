@@ -767,6 +767,28 @@
           },
           "correction_of": {
             "type": "null"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            },
+            "required": [
+              "state"
+            ]
           }
         }
       }
@@ -792,6 +814,31 @@
           },
           "correction_of": {
             "type": "null"
+          },
+          "approval": {
+            "type": "null"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            },
+            "required": [
+              "state"
+            ]
           }
         }
       }
@@ -814,13 +861,43 @@
         ],
         "properties": {
           "authorization": {
-            "$ref": "#/$defs/AuthorizationReferenceV1"
+            "type": "object",
+            "properties": {
+              "decision": {
+                "const": "REQUIRE_APPROVAL"
+              }
+            },
+            "required": [
+              "decision"
+            ]
           },
           "approval": {
             "$ref": "#/$defs/ApprovalReferenceV1"
           },
           "correction_of": {
             "type": "null"
+          },
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "NOT_APPLICABLE"
+              }
+            },
+            "required": [
+              "state"
+            ]
           }
         }
       }
@@ -847,7 +924,18 @@
         ],
         "properties": {
           "authorization": {
-            "$ref": "#/$defs/AuthorizationReferenceV1"
+            "type": "object",
+            "properties": {
+              "decision": {
+                "enum": [
+                  "ALLOW",
+                  "REQUIRE_APPROVAL"
+                ]
+              }
+            },
+            "required": [
+              "decision"
+            ]
           },
           "correction_of": {
             "type": "null"
@@ -875,6 +963,257 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 255
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "record_kind": {
+                "enum": [
+                  "EXECUTION_STARTED",
+                  "EXECUTION_COMPLETED",
+                  "VERIFICATION_RECORDED",
+                  "DEGRADED_MODE_RECORDED"
+                ]
+              }
+            },
+            "required": [
+              "record_kind"
+            ]
+          },
+          {
+            "properties": {
+              "authorization": {
+                "type": "object",
+                "properties": {
+                  "decision": {
+                    "const": "REQUIRE_APPROVAL"
+                  }
+                },
+                "required": [
+                  "decision"
+                ]
+              }
+            },
+            "required": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "required": [
+          "approval"
+        ],
+        "properties": {
+          "approval": {
+            "type": "object",
+            "properties": {
+              "decision": {
+                "const": "APPROVED"
+              }
+            },
+            "required": [
+              "decision"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "allOf": [
+          {
+            "properties": {
+              "record_kind": {
+                "enum": [
+                  "EXECUTION_STARTED",
+                  "EXECUTION_COMPLETED",
+                  "VERIFICATION_RECORDED",
+                  "DEGRADED_MODE_RECORDED"
+                ]
+              }
+            },
+            "required": [
+              "record_kind"
+            ]
+          },
+          {
+            "properties": {
+              "authorization": {
+                "type": "object",
+                "properties": {
+                  "decision": {
+                    "const": "ALLOW"
+                  }
+                },
+                "required": [
+                  "decision"
+                ]
+              }
+            },
+            "required": [
+              "authorization"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "approval": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "EXECUTION_STARTED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "STARTED"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "PENDING",
+                  "NOT_APPLICABLE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "EXECUTION_COMPLETED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "SUCCEEDED",
+                  "FAILED",
+                  "DEGRADED",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "PENDING",
+                  "NOT_APPLICABLE",
+                  "PASS",
+                  "FAIL",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "VERIFICATION_RECORDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "verification": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "enum": [
+                  "PASS",
+                  "FAIL",
+                  "INDETERMINATE"
+                ]
+              }
+            },
+            "required": [
+              "state"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "DEGRADED_MODE_RECORDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "execution": {
+            "type": "object",
+            "properties": {
+              "state": {
+                "const": "DEGRADED"
+              }
+            },
+            "required": [
+              "state"
+            ]
           }
         }
       }

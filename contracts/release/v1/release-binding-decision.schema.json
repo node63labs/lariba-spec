@@ -101,7 +101,8 @@
       "type": "array",
       "items": {
         "$ref": "./release-evidence-reference.schema.json"
-      }
+      },
+      "minItems": 1
     },
     "overall_result": {
       "enum": [
@@ -364,10 +365,7 @@
               "const": "MATCH"
             },
             "source_binding": {
-              "enum": [
-                "MATCH",
-                "NOT_APPLICABLE"
-              ]
+              "const": "MATCH"
             },
             "ci_binding": {
               "enum": [

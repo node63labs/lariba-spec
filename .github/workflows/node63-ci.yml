@@ -134,6 +134,9 @@ jobs:
             --path openapi.json \
             --source-sha "$GITHUB_SHA"
 
+          python scripts/ci/validate_contracts.py \
+            --root .
+
           STATE="$(
             python scripts/ci/node63_ci.py control \
               --profile "CI-P05" \

@@ -273,7 +273,8 @@
               "type": "array",
               "items": {
                 "$ref": "./release-evidence-reference.schema.json"
-              }
+              },
+              "minItems": 1
             }
           }
         },
@@ -317,7 +318,8 @@
               "type": "array",
               "items": {
                 "$ref": "./release-evidence-reference.schema.json"
-              }
+              },
+              "minItems": 1
             }
           }
         },
@@ -357,7 +359,8 @@
               "type": "array",
               "items": {
                 "$ref": "./release-evidence-reference.schema.json"
-              }
+              },
+              "minItems": 1
             }
           }
         },
@@ -393,7 +396,8 @@
             "type": "array",
             "items": {
               "$ref": "./release-evidence-reference.schema.json"
-            }
+            },
+            "minItems": 1
           }
         }
       }
@@ -412,7 +416,8 @@
       "type": "array",
       "items": {
         "$ref": "./release-evidence-reference.schema.json"
-      }
+      },
+      "minItems": 1
     }
   },
   "allOf": [
@@ -713,6 +718,241 @@
               ]
             },
             "minContains": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_class": {
+            "enum": [
+              "RC-01",
+              "RC-02"
+            ]
+          }
+        },
+        "required": [
+          "release_class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "release_action": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "action_kind": {
+                    "const": "deployment"
+                  }
+                },
+                "required": [
+                  "action_kind"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_class": {
+            "const": "RC-03"
+          }
+        },
+        "required": [
+          "release_class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "release_action": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "action_kind": {
+                    "enum": [
+                      "publication",
+                      "deployment"
+                    ]
+                  }
+                },
+                "required": [
+                  "action_kind"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_class": {
+            "const": "RC-04"
+          }
+        },
+        "required": [
+          "release_class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "release_action": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "action_kind": {
+                    "const": "package_publication"
+                  }
+                },
+                "required": [
+                  "action_kind"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_class": {
+            "const": "RC-05"
+          }
+        },
+        "required": [
+          "release_class"
+        ]
+      },
+      "then": {
+        "properties": {
+          "release_action": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "action_kind": {
+                    "const": "contract_promotion"
+                  }
+                },
+                "required": [
+                  "action_kind"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_class": {
+            "enum": [
+              "RC-01",
+              "RC-04",
+              "RC-05"
+            ]
+          }
+        },
+        "required": [
+          "release_class"
+        ]
+      },
+      "then": {
+        "required": [
+          "ci_bindings",
+          "builds"
+        ],
+        "properties": {
+          "ci_bindings": {
+            "type": "array",
+            "minItems": 1
+          },
+          "builds": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_action": {
+            "type": "object",
+            "properties": {
+              "action_kind": {
+                "const": "deployment"
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          }
+        },
+        "required": [
+          "release_action"
+        ]
+      },
+      "then": {
+        "required": [
+          "environment_context"
+        ],
+        "properties": {
+          "environment_context": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "release_action": {
+            "type": "object",
+            "properties": {
+              "action_kind": {
+                "enum": [
+                  "publication",
+                  "package_publication",
+                  "contract_promotion"
+                ]
+              }
+            },
+            "required": [
+              "action_kind"
+            ]
+          }
+        },
+        "required": [
+          "release_action"
+        ]
+      },
+      "then": {
+        "properties": {
+          "environment_context": {
+            "type": "null"
           }
         }
       }

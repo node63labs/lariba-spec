@@ -22,3 +22,14 @@ Raw credentials are prohibited from provenance records.
 
 Contract version: 1.0.0
 Schema version: 1
+
+## Deterministic validation
+
+Cross-field provenance invariants that cannot be expressed safely in portable JSON Schema are enforced by:
+
+`scripts/ci/validate_contracts.py`
+
+CI-P05 / CI-C03 executes that validator. The validator checks repository/source equality, source-SHA continuity across CI/build/artifact/release-action evidence, release-class action compatibility, environment applicability, binding applicability, non-empty material evidence, and fail-closed aggregate binding semantics.
+
+A structurally valid JSON document is not sufficient when these semantic checks fail.
+
