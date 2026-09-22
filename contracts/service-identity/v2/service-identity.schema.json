@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:node63:lariba-cloud:service-identity:v2",
+  "title": "ServiceIdentityV2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_version",
+    "principal_id",
+    "principal_type",
+    "issuing_authority",
+    "product_context",
+    "environment",
+    "service_id",
+    "service_class",
+    "status",
+    "correlation_identity",
+    "credential_reference"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 2
+    },
+    "contract_version": {
+      "const": "2.0.0"
+    },
+    "principal_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "principal_type": {
+      "const": "service"
+    },
+    "issuing_authority": {
+      "const": "urn:node63:lariba-cloud:service-identity"
+    },
+    "product_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_id"
+      ],
+      "properties": {
+        "product_id": {
+          "enum": [
+            "lariba-cloud",
+            "medicamentos",
+            "nha-voto",
+            "longam",
+            "morabeza"
+          ]
+        }
+      }
+    },
+    "organization_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "environment_id",
+        "environment_class"
+      ],
+      "properties": {
+        "environment_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255,
+          "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+        },
+        "environment_class": {
+          "enum": [
+            "development",
+            "test",
+            "preview",
+            "staging",
+            "production"
+          ]
+        }
+      }
+    },
+    "service_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[a-z0-9][a-z0-9._:-]*$"
+    },
+    "service_class": {
+      "enum": [
+        "api",
+        "worker",
+        "connector",
+        "automation",
+        "system"
+      ]
+    },
+    "status": {
+      "enum": [
+        "active",
+        "suspended",
+        "retired"
+      ]
+    },
+    "correlation_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "credential_reference": {
+      "$ref": "../v1/service-credential-reference.schema.json"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}
