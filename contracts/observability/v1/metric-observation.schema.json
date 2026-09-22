@@ -51,42 +51,69 @@
     },
     "dimensions": {
       "type": "object",
-      "propertyNames": {
-        "not": {
+      "additionalProperties": false,
+      "properties": {
+        "product_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]*$",
+          "maxLength": 80
+        },
+        "service_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "environment_class": {
           "enum": [
-            "correlation_id",
-            "request_id",
-            "trace_id",
-            "span_id",
-            "action_id",
-            "event_id",
-            "user_id",
-            "email",
-            "ip",
-            "tenant_id",
-            "organization_id",
-            "sale_id",
-            "prescription_id",
-            "inventory_item_id"
+            "development",
+            "test",
+            "preview",
+            "staging",
+            "production"
           ]
+        },
+        "operation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "result": {
+          "enum": [
+            "SUCCESS",
+            "FAILURE",
+            "DEGRADED",
+            "DENIED",
+            "INDETERMINATE",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "dependency_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "dependency_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "degraded_state": {
+          "enum": [
+            "NONE",
+            "DEPENDENCY_UNAVAILABLE",
+            "OBSERVABILITY_PARTIAL",
+            "QUEUE_BACKLOG",
+            "RATE_LIMITED",
+            "READ_ONLY_MODE",
+            "FAILOVER_ACTIVE",
+            "UNKNOWN"
+          ]
+        },
+        "release_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
         }
-      },
-      "additionalProperties": {
-        "oneOf": [
-          {
-            "type": "string",
-            "maxLength": 255
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "integer"
-          },
-          {
-            "type": "boolean"
-          }
-        ]
       }
     }
   }

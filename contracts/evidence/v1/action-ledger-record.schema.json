@@ -14,7 +14,6 @@
     "recorded_at",
     "actor",
     "capability",
-    "authorization",
     "action",
     "context",
     "execution",
@@ -64,12 +63,12 @@
       "format": "date-time"
     },
     "actor": {
-      "$ref": "#/$defs/PrincipalReferenceV1"
+      "$ref": "#/$defs/AuthorityPrincipalReferenceV1"
     },
     "agent": {
       "oneOf": [
         {
-          "$ref": "#/$defs/PrincipalReferenceV1"
+          "$ref": "#/$defs/AgentEvidenceReferenceV1"
         },
         {
           "type": "null"
@@ -90,7 +89,14 @@
       "$ref": "#/$defs/CapabilityReferenceV1"
     },
     "authorization": {
-      "$ref": "#/$defs/AuthorizationReferenceV1"
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AuthorizationReferenceV1"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "approval": {
       "oneOf": [
@@ -195,53 +201,6 @@
     }
   },
   "$defs": {
-    "PrincipalReferenceV1": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "principal_id",
-        "principal_type"
-      ],
-      "properties": {
-        "principal_id": {
-          "type": "string",
-          "minLength": 1,
-          "maxLength": 255
-        },
-        "principal_type": {
-          "enum": [
-            "human",
-            "service",
-            "agent",
-            "system"
-          ]
-        },
-        "product_id": {
-          "oneOf": [
-            {
-              "type": "string",
-              "pattern": "^[a-z0-9][a-z0-9-]*$",
-              "maxLength": 80
-            },
-            {
-              "type": "null"
-            }
-          ]
-        },
-        "identity_ref": {
-          "oneOf": [
-            {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 1024
-            },
-            {
-              "type": "null"
-            }
-          ]
-        }
-      }
-    },
     "DelegationReferenceV1": {
       "type": "object",
       "additionalProperties": false,
@@ -688,6 +647,237 @@
           ]
         }
       }
+    },
+    "AuthorityPrincipalReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "principal_id",
+        "principal_type"
+      ],
+      "properties": {
+        "principal_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "principal_type": {
+          "enum": [
+            "human",
+            "service"
+          ]
+        },
+        "product_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$",
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "identity_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "AgentEvidenceReferenceV1": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agent_id",
+        "agent_type",
+        "identity_ref"
+      ],
+      "properties": {
+        "agent_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 255
+        },
+        "agent_type": {
+          "enum": [
+            "agent",
+            "system"
+          ]
+        },
+        "identity_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "product_id": {
+          "oneOf": [
+            {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-]*$",
+              "maxLength": 80
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "executor_ref": {
+          "oneOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "ACTION_REQUESTED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "authorization": {
+            "type": "null"
+          },
+          "approval": {
+            "type": "null"
+          },
+          "correction_of": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "AUTHORIZATION_DECIDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorization"
+        ],
+        "properties": {
+          "authorization": {
+            "$ref": "#/$defs/AuthorizationReferenceV1"
+          },
+          "correction_of": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "APPROVAL_DECIDED"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorization",
+          "approval"
+        ],
+        "properties": {
+          "authorization": {
+            "$ref": "#/$defs/AuthorizationReferenceV1"
+          },
+          "approval": {
+            "$ref": "#/$defs/ApprovalReferenceV1"
+          },
+          "correction_of": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "enum": [
+              "EXECUTION_STARTED",
+              "EXECUTION_COMPLETED",
+              "VERIFICATION_RECORDED",
+              "DEGRADED_MODE_RECORDED"
+            ]
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "authorization"
+        ],
+        "properties": {
+          "authorization": {
+            "$ref": "#/$defs/AuthorizationReferenceV1"
+          },
+          "correction_of": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "record_kind": {
+            "const": "CORRECTION"
+          }
+        },
+        "required": [
+          "record_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "correction_of"
+        ],
+        "properties": {
+          "correction_of": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 255
+          }
+        }
+      }
+    }
+  ]
 }

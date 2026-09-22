@@ -110,5 +110,314 @@
         "INDETERMINATE"
       ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "overall_result": {
+              "const": "MISMATCH"
+            }
+          },
+          "required": [
+            "overall_result"
+          ],
+          "anyOf": [
+            {
+              "properties": {
+                "source_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "source_binding"
+              ]
+            },
+            {
+              "properties": {
+                "ci_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "ci_binding"
+              ]
+            },
+            {
+              "properties": {
+                "build_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "build_binding"
+              ]
+            },
+            {
+              "properties": {
+                "artifact_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "artifact_binding"
+              ]
+            },
+            {
+              "properties": {
+                "environment_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "environment_binding"
+              ]
+            },
+            {
+              "properties": {
+                "release_action_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "release_action_binding"
+              ]
+            },
+            {
+              "properties": {
+                "verification_binding": {
+                  "const": "MISMATCH"
+                }
+              },
+              "required": [
+                "verification_binding"
+              ]
+            }
+          ]
+        },
+        {
+          "properties": {
+            "overall_result": {
+              "const": "INDETERMINATE"
+            }
+          },
+          "required": [
+            "overall_result"
+          ],
+          "allOf": [
+            {
+              "not": {
+                "anyOf": [
+                  {
+                    "properties": {
+                      "source_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "source_binding"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "ci_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "ci_binding"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "build_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "build_binding"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "artifact_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "artifact_binding"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "environment_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "environment_binding"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "release_action_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "release_action_binding"
+                    ]
+                  },
+                  {
+                    "properties": {
+                      "verification_binding": {
+                        "const": "MISMATCH"
+                      }
+                    },
+                    "required": [
+                      "verification_binding"
+                    ]
+                  }
+                ]
+              }
+            },
+            {
+              "anyOf": [
+                {
+                  "properties": {
+                    "source_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "source_binding"
+                  ]
+                },
+                {
+                  "properties": {
+                    "ci_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "ci_binding"
+                  ]
+                },
+                {
+                  "properties": {
+                    "build_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "build_binding"
+                  ]
+                },
+                {
+                  "properties": {
+                    "artifact_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "artifact_binding"
+                  ]
+                },
+                {
+                  "properties": {
+                    "environment_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "environment_binding"
+                  ]
+                },
+                {
+                  "properties": {
+                    "release_action_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "release_action_binding"
+                  ]
+                },
+                {
+                  "properties": {
+                    "verification_binding": {
+                      "const": "INDETERMINATE"
+                    }
+                  },
+                  "required": [
+                    "verification_binding"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "properties": {
+            "overall_result": {
+              "const": "MATCH"
+            },
+            "source_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "ci_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "build_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "artifact_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "environment_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "release_action_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            },
+            "verification_binding": {
+              "enum": [
+                "MATCH",
+                "NOT_APPLICABLE"
+              ]
+            }
+          },
+          "required": [
+            "overall_result",
+            "source_binding",
+            "ci_binding",
+            "build_binding",
+            "artifact_binding",
+            "environment_binding",
+            "release_action_binding",
+            "verification_binding"
+          ]
+        }
+      ]
+    }
+  ]
 }

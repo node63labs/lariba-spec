@@ -10,7 +10,7 @@
     "release_record_ref",
     "release_identity",
     "source_commit_sha",
-    "environment_ref",
+    "action_kind",
     "target_ref",
     "occurred_at",
     "evidence_refs"
@@ -57,9 +57,16 @@
       "pattern": "^[0-9a-f]{40}$"
     },
     "environment_ref": {
-      "type": "string",
-      "minLength": 1,
-      "maxLength": 1024
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "target_ref": {
       "type": "string",
@@ -96,5 +103,54 @@
         "$ref": "./release-evidence-reference.schema.json"
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action_kind": {
+            "const": "deployment"
+          }
+        },
+        "required": [
+          "action_kind"
+        ]
+      },
+      "then": {
+        "required": [
+          "environment_ref"
+        ],
+        "properties": {
+          "environment_ref": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action_kind": {
+            "enum": [
+              "publication",
+              "package_publication",
+              "contract_promotion"
+            ]
+          }
+        },
+        "required": [
+          "action_kind"
+        ]
+      },
+      "then": {
+        "properties": {
+          "environment_ref": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
 }
